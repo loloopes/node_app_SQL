@@ -17,8 +17,7 @@ const getNewCep = ({ cep, logradouro, bairro, localidade, uf }) => ({
 });
 
 const findAddressByCep = async (cepToSearch) => {
-  // Removemos todos os traços, pois armazenamos o CEP
-  // puro no banco
+
   const treatedCep = cepToSearch.replace('-', '');
 
   const query = 'SELECT cep, logradouro, bairro, localidade, uf FROM ceps WHERE cep = ?';
@@ -32,15 +31,14 @@ const findAddressByCep = async (cepToSearch) => {
 };
 
 const create = async ({ cep: rawCep, logradouro, bairro, localidade, uf }) => {
-  // Removemos o traço do CEP para armazená-lo de forma limpa
+ 
   const cep = rawCep.replace(/-/ig, '');
 
   const query = 'INSERT INTO ceps (cep, logradouro, bairro, localidade, uf) VALUES (?, ?, ?, ?, ?)';
 
-  // Executamos a query
+ 
   await connection.execute(query, [cep, logradouro, bairro, localidade, uf]);
 
-  // Depois de inserir, retornamos os dados, como sinal de que foram guardados no banco
   return { cep, logradouro, bairro, localidade, uf };
 };
 
